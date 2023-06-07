@@ -1,0 +1,212 @@
+
+vagrant init ubuntu/trusty64
+vagrant status 
+vagrant global-status
+vagrant ssh
+
+- Vagrant box
+Box File - This is a compressed (tar, tar.gz, zip) file that is specififique to a single 
+provider and can contain anything. Vagrant core oes not ever use the contents of this file. 
+Instead, they are passed to the provider. Therefore, a virualBox file has different content 
+from a VMware box file and so on.  
+- Box Cataog Metdata - This is JSON document (typically exchanged during interaction with
+Hashicorp's Vagrant Cloud) that specifies the name of the box, a description, available 
+versions, available provider, and URLs to the  box files(next component) for each provider
+and version. If this catalog metadata does not exist, a box file can still be added 
+directly, but it will not support versionning and updating.
+- Box information -  This is a JSON ducument that can provide additionnal information about 
+this when a user runs vagrant box list -i. Mor information is provided here.
+
+Install Vagrant Box
+Méthoe 1 pas conseillé
+vagrant box ad --name ubuntu "https://app.vagrantup.com/ubuntu/boxes/trusty64/versions20190514.0.0/providers/vitualbox.box"
+Méthoe 2
+vagrant box add ubuntu/trusty ( --box-version-20190429.0.1)
+c'est important de préciser la version par la laster n'est pas le même d'un jour à l'autre 
+Méthoe 3
+vagrant box add htps://app.vagrantup.com/ubuntu/box/trusty
+
+Lab 1
+
+Créer un dossier lab-1
+deplacr dans ce dossier
+Initialiser vagrant (vagrant init ubuntu/trusty64)
+démarrer la VM 
+Connecez-vous en ssh
+Arretez la VM et supprimer la
+
+vagrant status
+1 vagrant init ubuntu/trusty
+2 vagrant up
+vagrant status
+vagrant global-status
+3 vagrant ssh
+4 vagrant halt 
+vagrant destroy
+ 
+Lab 2
+
+. Créer un dossier lab-2
+. Déplacer dans ce dossier
+. Initialiser vagrant en utilisant la version 20190425.0.0 ubunu/trusty64
+.démarrer la VM
+. Connectez-vous en ssh. Installer nginx
+. Démarrer son service et activer son démarrage au lancement VM
+. Créer une vbox à partir de cette VM
+. Créer un compte sur vagrant cloud
+. Plubliez votre vbox sur vagrant cloud sous le nom <username>/nginx en version v1 
+vagrant init ubuntu/trusty64 -h
+vagrant init ubuntu/trusty64 --box-version 20190425.0.0
+vagrant up 
+vagrant ssh
+$ sudo apt-get update
+$ sudo apt-get install nginx -y
+$ sudo service nginx start
+$ sudo service nginx enable
+$ sudo service nginx status
+$ curl 127.0.0.1
+
+Vagrantfile
+Publication de notre  vbox
+vagrant package --output nginx.box
+
+vagrant init ou vagrant init -m (creation d'un vagrant file)
+
+Lab 3
+
+- Créer un dossier lab-3
+-  Déplacez-vous dans ce dossier
+- Créer un vagrant afin de configurer la VM à partire des informations suivantes:
+  . Image de base : Centos 7 By Gerlingguy
+  . CPU : 2
+  . RAM : 2 Go
+- Vriabilisez les paramètre indiquées ci-dessus
+- Connectez-vous en ssh
+- Installez nginx 
+Arreter la VM et supprimez la
+
+1 vagrant init geerlingguy/centos7 -m
+2 modification du fichier vagrant file
+vagrant validate (commandes à executer a chagque modification du vagrantfile)
+vagrant up
+vagrant ssh
+sudo yum install nginx
+sudo systemctl status nginx
+sudo systemctl start nginx
+curl 127.0.0.1
+logout 
+vagrant destroy
+
+Lab 4 : Déploiement d'un serveur web
+- Créer un dossier lab-4
+- Déplacez-vous dans ce dossier 
+- Créer un vagrantfile afin de configurer la VM à partir des informations suivantes:
+	. Image de base : Centos By Geerligguy
+	. CPU : 2
+	. RAM : 2 Go
+	. IP fixe privée : 10.0.0.10
+- Variabilité des paramètres indiquées ci-dessus
+- Connectez-vous en ssh
+- Installez nginx
+- Vérifiez que vous avez accès à l'application depuis le PC local via http://10.0.0.10
+- Arretez la VM et supprimez la
+
+1 vagrant init geerlingguy/centos7 -m
+2 modification du fichier vagrant file
+vagrant validate (commandes à executer a chagque modification du vagrantfile)
+vagrant up
+ssh vagrant@10.0.0.10
+sudo yum install nginx
+sudo systemctl start nginx
+Et l'adresse ip sur le navigateur
+exit 
+vagrant destroy
+
+Lab 5 : Déploiement d'un serveur Web
+
+- Créer un dossier lab-5
+- Déplacez-vous dans ce dossier
+- Créer un vagrantfile afin de configurer 3 VMs à des informations suivantes :
+	. Image de base : ubuntu/xenial64
+	. RAM : 1 Go
+	. VM1 : lb, ip: 10.0.0.10
+	. VM2 : web1, ip: 10.0.0.11
+	. VM3 : web2, ip: 10.0.0.12
+- Connectez-vous en sur chacune d'elles
+- Arretez les VMs puis supprimez les
+
+1 vagrant init -m
+2 modification du fichier vagrant file
+vagrant validate (commandes à executer a chagque modification du vagrantfile)
+vagrant up
+
+
+Lab-6 : Plugin
+
+- Créer un dossier lab-6
+- Déplacez-vous dans ce dossier 
+- Créer un vagrantfile afin de configurer 3 VMs à partir des informations suisvant:
+. Image de base : ubuntu/xenial64
+	. RAM : 1 Go
+	. VM1 : lb, ip: 10.0.0.10
+	. VM2 : web1, ip: 10.0.0.11
+	. VM3 : web2, ip: 10.0.0.12
+- Installez et utilisez le plugin vagrant-hostupdater afin que le fichier hosts de chaque 
+machine corresponde à la rélité de leur nomet de leur IP malgré les action UP, RESUME et 
+RELOAD(Lisez la doc pour mieux comprendre son utilité)
+- Lors du vagrant up, vérifiez que le plugin est bien appelé
+- Connectez-vous en ssh sur chacune d'elles
+-Arretez les VMs puis suppreimez les
+
+
+Lab 4 : Déploiement d'un serveur web
+- Créer un dossier lab-4
+- Déplacez-vous dans ce dossier 
+- Créer un vagrantfile afin de configurer la VM à partir des informations suivantes:
+	. Image de base : <username>/nginx créer dans le lab-2
+	. CPU : 2
+	. RAM : 2 Go
+	. IP fixe privée : 10.0.0.10
+- Recupérer en local dans votre dossier lab-7 l'application static-website-example
+- Montez le code de l'application par le moyen de votre choix dans le dossier 
+/var/www/html de la VM
+- Vérifier que le site est recupérer depuis github est bien accessible 
+- Arretez la VM puis supprimer la 
+
+Shell provisioner : provision option
+vagrant up 
+vagrant up --provision
+vagrant provision 
+vagrant reload --provision 
+
+Lab-8 : Shell
+- Créer un dossier lab-8
+- Déplacez-vous dans ce dossier 
+- Créer un vagrantfile afin de configurer 3 VMs à partir des information suivantes:
+	. Image de base : ubuntu/xenial64
+	. CPU : 1
+	. RAM : 1 Go
+	. VM1 : lb, ip: 10.0.0.10, exécutez le scriote suivant
+	. VM2 : web1, ip: 10.0.0.11, exécutez le scriote suivant
+	. VM3 : web2, ip: 10.0.0.12, exécutez le scriote suivant
+- N'hésitez pas de lire le scypte pour mieux comprendre les opérations exécutées 
+- Accédez à l'interface web de chaqueserveur et confirmez que l'application a bien 
+fonctionnée 
+- Arreter les VMs puis supprimez les
+
+Lab 9 : Installation de nginx à partir de ansible
+- Créer un dossier lab-9
+- Déplacez-vous dans ce dossier 
+- Créer un vagrantfile afin de configurer la VM à partir des informations suivantes:
+	. Image de base : ubuntu/xenial64 ou OS de votre choix
+	. CPU : 1
+	. RAM : 1 Go
+	. IP fixe privée : 10.0.0.10
+- Exécutez un playbook s'appellant nginx.yaml qui permettra d'installer nginx et le démarrer 
+- Vous devrait vous basé sur ansible-local pour que le playbook soit executé dans la VM
+- Vérifiez que la page par défaut de nginx est bien eccessible via le navigateur
+- Arretez la VM et supprimez la  
+	
+
+
+
